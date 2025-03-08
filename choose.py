@@ -4,7 +4,6 @@ from random import seed
 from tkinter import messagebox as mes
 from time import time
 import os.path as path
-from sys import exit
 
 
 class ChooseStudent:
@@ -35,11 +34,14 @@ class ChooseStudent:
             filepath = path.join(path.dirname(path.abspath(__file__)), "namelist.txt")
             with open(filepath, "r", encoding="utf-8") as f:
                 self.namelist = f.read().split("\n")
+            if len(self.namelist) == 1:
+                raise FileNotFoundError
         except FileNotFoundError:
             mes.showerror("错误", "数据获取失败")
-            exit(1)
+            return False
+        return True
 
     def choose(self):
         # 选人
-        self.fileIn()
-        mes.showinfo("结果", f"恭喜{choice(self.namelist)}同学，请你回答该问题！")
+        if self.fileIn():
+            mes.showinfo("结果", f"恭喜{choice(self.namelist)}同学，请回答该问题！")

@@ -1,6 +1,6 @@
 from choose import ChooseStudent
-from read import Read
 import tkinter as tk
+from timer import Timer
 
 
 class Main:
@@ -21,11 +21,11 @@ class Main:
         )
         self.bun1 = tk.Button(self.top, command=ChooseStudent, text="随机选人")
         self.bun1.pack()
-        self.bun2 = tk.Button(self.top, command=Read, text="默写")
+        self.bun2 = tk.Button(self.top, command=Timer, text="计时器")
         self.bun2.pack()
 
 
-VIERSION = "Alpha-0.2"
+VIERSION = "Alpha-0.3"
 
 if __name__ == "__main__":
     Main()
