@@ -7,19 +7,21 @@ import simpleaudio as sa
 
 
 class Timer:
-    def __init__(self):
+    def __init__(self, father):
+        father.count += 1
         # 初始化窗口
-        self.top = tk.Tk()
+        self.father = father
+        self.top = tk.Toplevel(father.top)
         self.top.title("计时器")
-        width = self.top.winfo_screenwidth()
-        height = self.top.winfo_screenheight()
+        self.width = father.width
+        self.height = father.height
         self.top.geometry(
             "%dx%d+%d+%d"
             % (
-                width // 2,
-                height // 2,
-                width // 4,
-                height // 4,
+                self.width // 2,
+                self.height // 2,
+                self.width // 4,
+                self.height // 4,
             )
         )
         self.input_time = 0
@@ -46,8 +48,8 @@ class Timer:
         if self.status:
             self.show_error("请先暂停计时器")
             return
-        ret = askinteger("设置时间", "请输入时间(分钟)", minvalue=1)
-        if ret != None:
+        ret = askinteger("设置时间", "请输入时间(分钟)", minvalue=1, parent=self.top)
+        if ret is not None:
             self.input_time = ret * 60
             self.set_time.set(
                 time.strftime(
@@ -95,6 +97,7 @@ class Timer:
 
     def on_closing(self):
         sa.stop_all()
+        self.father.count -= 1
         self.top.destroy()
 
     def show_error(self, text: str):

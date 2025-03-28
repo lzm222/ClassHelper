@@ -7,26 +7,29 @@ import os.path as path
 
 
 class ChooseStudent:
-    def __init__(self):
+    def __init__(self, father):
         seed(time())  # 随机种子
         self.namelist = []
+        father.count += 1
         # 初始化窗口
-        self.top = tk.Tk()
+        self.father = father
+        self.top = tk.Toplevel(father.top)
         self.top.title("随机选人")
         self.top.wm_attributes("-topmost", True)
-        width = self.top.winfo_screenwidth()
-        height = self.top.winfo_screenheight()
+        self.width = father.width
+        self.height = father.height
         self.top.geometry(
             "%dx%d+%d+%d"
             % (
-                width // 8,
-                height // 8,
-                width - width // 8 - 40,
-                height - height // 8 - 80,
+                self.width // 8,
+                self.height // 8,
+                self.width - self.width // 8 - 40,
+                self.height - self.height // 8 - 80,
             )
         )
         self.bun = tk.Button(self.top, command=self.choose, text="选人")
         self.bun.pack()
+        self.top.protocol("WM_DELETE_WINDOW", self.on_closing)
 
     def fileIn(self):
         # 读取名单
@@ -34,14 +37,41 @@ class ChooseStudent:
             filepath = path.join(path.dirname(path.abspath(__file__)), "namelist.txt")
             with open(filepath, "r", encoding="utf-8") as f:
                 self.namelist = f.read().split("\n")
-            if len(self.namelist) == 1:
+            if self.namelist[0] == "":
                 raise FileNotFoundError
         except FileNotFoundError:
-            mes.showerror("错误", "数据获取失败")
+            mes.showerror("错误", "数据获取失败", parent=self.top)
             return False
         return True
 
+    def show(self, name):
+        # 设置消息框
+        dialog = tk.Toplevel(self.top)
+        dialog.title("结果")
+        dialog.geometry(
+            "%dx%d+%d+%d"
+            % (
+                self.width // 2,
+                self.height // 2,
+                self.width // 4,
+                self.height // 4,
+            )
+        )
+        # 自定义字体
+        font = ("Arial", 200)
+        # 显示结果
+        label = tk.Label(dialog, text=name, font=font)
+        label.pack(expand=True, anchor="center")
+
     def choose(self):
+        # 检查旧窗口是否已关闭
+        for i in self.top.winfo_children():
+            if i.winfo_class() == "Toplevel":
+                i.destroy()
         # 选人
         if self.fileIn():
-            mes.showinfo("结果", f"恭喜{choice(self.namelist)}同学，请回答该问题！")
+            self.show(choice(self.namelist))
+
+    def on_closing(self):
+        self.father.count -= 1
+        self.top.destroy()
