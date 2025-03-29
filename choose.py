@@ -4,6 +4,7 @@ from random import seed
 from tkinter import messagebox as mes
 from time import time
 import os.path as path
+import simpleaudio as sa
 
 
 class ChooseStudent:
@@ -58,10 +59,13 @@ class ChooseStudent:
             )
         )
         # 自定义字体
-        font = ("Arial", 200)
+        font = ("黑体", 150)
         # 显示结果
         label = tk.Label(dialog, text=name, font=font)
         label.pack(expand=True, anchor="center")
+        rel_path = ["assets", "audio", "choose", "qiang.wav"]
+        audio = path.join(path.dirname(path.abspath(__file__)), *rel_path)
+        sa.WaveObject.from_wave_file(audio).play()
 
     def choose(self):
         # 检查旧窗口是否已关闭
