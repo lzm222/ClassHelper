@@ -8,18 +8,18 @@ import simpleaudio as sa
 
 
 class ChooseStudent:
-    def __init__(self, father):
+    def __init__(self, parent):
         seed(time())  # 随机种子
-        self.namelist = []
-        father.count += 1
+        self.nameList = []
+        parent.count += 1
         # 初始化窗口
-        self.father = father
-        self.top = tk.Toplevel(father.top)
-        self.top.title("随机选人")
-        self.top.wm_attributes("-topmost", True)
-        self.width = father.width
-        self.height = father.height
-        self.top.geometry(
+        self.parent = parent
+        self.window = tk.Toplevel(parent.top)
+        self.window.title("随机选人")
+        self.window.wm_attributes("-topmost", True)
+        self.width = parent.width
+        self.height = parent.height
+        self.window.geometry(
             "%dx%d+%d+%d"
             % (
                 self.width // 8,
@@ -28,30 +28,32 @@ class ChooseStudent:
                 self.height - self.height // 8 - 80,
             )
         )
-        self.bun = tk.Button(self.top, command=self.choose, text="选人")
-        self.bun.pack()
-        self.top.protocol("WM_DELETE_WINDOW", self.on_closing)
+        self.chooseButton = tk.Button(
+            self.window, command=self.selectStudent, text="选人"
+        )
+        self.chooseButton.pack()
+        self.window.protocol("WM_DELETE_WINDOW", self.onClosing)
 
-    def fileIn(self):
+    def loadNameList(self):
         # 读取名单
         try:
-            filepath = path.normpath(
+            filePath = path.normpath(
                 path.join(path.dirname(__file__), "../resource/namelist.txt")
             )
-            with open(filepath, "r", encoding="utf-8") as f:
-                self.namelist = f.read().split("\n")
-            if self.namelist[0] == "":
+            with open(filePath, "r", encoding="utf-8") as f:
+                self.nameList = f.read().split("\n")
+            if self.nameList[0] == "":
                 raise FileNotFoundError
         except FileNotFoundError:
-            mes.showerror("错误", "数据获取失败", parent=self.top)
+            mes.showerror("错误", "数据获取失败", parent=self.window)
             return False
         return True
 
-    def show(self, name):
+    def displayResult(self, name):
         # 设置消息框
-        dialog = tk.Toplevel(self.top)
-        dialog.title("结果")
-        dialog.geometry(
+        resultWindow = tk.Toplevel(self.window)
+        resultWindow.title("结果")
+        resultWindow.geometry(
             "%dx%d+%d+%d"
             % (
                 self.width // 2,
@@ -61,24 +63,24 @@ class ChooseStudent:
             )
         )
         # 自定义字体
-        font = ("黑体", 150)
+        resultFont = ("黑体", 150)
         # 显示结果
-        label = tk.Label(dialog, text=name, font=font)
-        label.pack(expand=True, anchor="center")
-        audio = path.normpath(
+        resultLabel = tk.Label(resultWindow, text=name, font=resultFont)
+        resultLabel.pack(expand=True, anchor="center")
+        audioPath = path.normpath(
             path.join(path.dirname(__file__), "../assets/audio/choose/qiang.wav")
         )
-        sa.WaveObject.from_wave_file(audio).play()
+        sa.WaveObject.from_wave_file(audioPath).play()
 
-    def choose(self):
+    def selectStudent(self):
         # 检查旧窗口是否已关闭
-        for i in self.top.winfo_children():
-            if i.winfo_class() == "Toplevel":
-                i.destroy()
+        for widget in self.window.winfo_children():
+            if widget.winfo_class() == "Toplevel":
+                widget.destroy()
         # 选人
-        if self.fileIn():
-            self.show(choice(self.namelist))
+        if self.loadNameList():
+            self.displayResult(choice(self.nameList))
 
-    def on_closing(self):
-        self.father.count -= 1
-        self.top.destroy()
+    def onClosing(self):
+        self.parent.count -= 1
+        self.window.destroy()

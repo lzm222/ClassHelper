@@ -2,15 +2,17 @@ from choose import ChooseStudent
 import tkinter as tk
 from timer import Timer
 
+VERSION = "Alpha-0.4"
+
 
 class Main:
     def __init__(self):
         # 初始化窗口
-        self.top = tk.Tk()
-        self.top.title(f"课堂小助手 {VERSION}")
-        self.width = self.top.winfo_screenwidth()
-        self.height = self.top.winfo_screenheight()
-        self.top.geometry(
+        self.mainWindow = tk.Tk()
+        self.mainWindow.title(f"课堂小助手 {VERSION}")
+        self.width = self.mainWindow.winfo_screenwidth()
+        self.height = self.mainWindow.winfo_screenheight()
+        self.mainWindow.geometry(
             "%dx%d+%d+%d"
             % (
                 self.width // 2,
@@ -20,29 +22,29 @@ class Main:
             )
         )
         self.count = 0
-        self.bun1 = tk.Button(
-            self.top, command=lambda: ChooseStudent(self), text="随机选人"
+        self.chooseStudentButton = tk.Button(
+            self.mainWindow, command=lambda: ChooseStudent(self), text="随机选人"
         )
-        self.bun1.pack()
-        self.bun2 = tk.Button(self.top, command=lambda: Timer(self), text="计时器")
-        self.bun2.pack()
+        self.chooseStudentButton.pack()
+        self.timerButton = tk.Button(
+            self.mainWindow, command=lambda: Timer(self), text="计时器"
+        )
+        self.timerButton.pack()
 
         # 拦截主窗口的关闭事件
-        self.top.protocol("WM_DELETE_WINDOW", self.on_closing)
+        self.mainWindow.protocol("WM_DELETE_WINDOW", self.onClosing)
 
-    def on_closing(self):
-        self.top.withdraw()
+    def onClosing(self):
+        self.mainWindow.withdraw()
 
-        def try_close():
+        def tryClose():
             if self.count > 0:
-                self.top.after(100, try_close)  # 每100毫秒检查一次
+                self.mainWindow.after(100, tryClose)  # 每100毫秒检查一次
             else:
-                self.top.destroy()
+                self.mainWindow.destroy()
 
-        try_close()
+        tryClose()
 
-
-VERSION = "Alpha-0.4"
 
 if __name__ == "__main__":
     Main()

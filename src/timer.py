@@ -7,15 +7,15 @@ import simpleaudio as sa
 
 
 class Timer:
-    def __init__(self, father):
-        father.count += 1
+    def __init__(self, parent):
+        parent.count += 1
         # 初始化窗口
-        self.father = father
-        self.top = tk.Toplevel(father.top)
-        self.top.title("计时器")
-        self.width = father.width
-        self.height = father.height
-        self.top.geometry(
+        self.parent = parent
+        self.window = tk.Toplevel(parent.top)
+        self.window.title("计时器")
+        self.width = parent.width
+        self.height = parent.height
+        self.window.geometry(
             "%dx%d+%d+%d"
             % (
                 self.width // 2,
@@ -24,82 +24,88 @@ class Timer:
                 self.height // 4,
             )
         )
-        self.input_time = 0
-        self.set_time = tk.StringVar(self.top, value="00:00:00")
-        self.start_time = 0
-        self.status = False
-        self.timer = tk.Label(self.top, textvariable=self.set_time, font=("Arial", 100))
-        self.button_bar = tk.Frame(self.top)
-        self.start_bun = tk.Button(self.button_bar, command=self.start, text="开始")
-        self.stop_bun = tk.Button(self.button_bar, command=self.stop, text="暂停")
-        self.set_bun = tk.Button(
-            self.button_bar,
-            command=self.get_time,
+        self.remainingTime = 0
+        self.displayTime = tk.StringVar(self.window, value="00:00:00")
+        self.startTime = 0
+        self.isRunning = False
+        self.timeLabel = tk.Label(
+            self.window, textvariable=self.displayTime, font=("Arial", 100)
+        )
+        self.buttonFrame = tk.Frame(self.window)
+        self.startButton = tk.Button(self.buttonFrame, command=self.start, text="开始")
+        self.stopButton = tk.Button(self.buttonFrame, command=self.stop, text="暂停")
+        self.setButton = tk.Button(
+            self.buttonFrame,
+            command=self.getTime,
             text="设置时间",
         )
-        self.timer.pack()
-        self.button_bar.pack()
-        self.start_bun.pack(side=tk.LEFT, padx=5)
-        self.stop_bun.pack(side=tk.LEFT, padx=5)
-        self.set_bun.pack(side=tk.LEFT, padx=5)
-        self.top.protocol("WM_DELETE_WINDOW", self.on_closing)
+        self.timeLabel.pack()
+        self.buttonFrame.pack()
+        self.startButton.pack(side=tk.LEFT, padx=5)
+        self.stopButton.pack(side=tk.LEFT, padx=5)
+        self.setButton.pack(side=tk.LEFT, padx=5)
+        self.window.protocol("WM_DELETE_WINDOW", self.onClosing)
 
-    def get_time(self):
-        if self.status:
-            self.show_error("请先暂停计时器")
+    def getTime(self):
+        if self.isRunning:
+            self.showError("请先暂停计时器")
             return
-        ret = askinteger("设置时间", "请输入时间(分钟)", minvalue=1, parent=self.top)
-        if ret is not None:
-            self.input_time = ret * 60
-            self.set_time.set(
+        userInput = askinteger(
+            "设置时间", "请输入时间(分钟)", minvalue=1, parent=self.window
+        )
+        if userInput is not None:
+            self.remainingTime = userInput * 60
+            self.displayTime.set(
                 time.strftime(
                     "%H:%M:%S",
-                    time.gmtime(self.input_time),
+                    time.gmtime(self.remainingTime),
                 )
             )
 
     def start(self):
-        if self.input_time == 0:
-            self.show_error("请先设置时间")
+        if self.remainingTime == 0:
+            self.showError("请先设置时间")
             return
-        if self.status:
+        if self.isRunning:
             return
-        self.status = True
-        self.start_time = time.time()
+        self.isRunning = True
+        self.startTime = time.time()
         self.updater()
 
     def stop(self):
-        if not self.status:
+        if not self.isRunning:
             return
-        self.status = False
-        self.input_time = self.input_time - (time.time() - self.start_time)
+        self.isRunning = False
+        self.remainingTime = self.remainingTime - (time.time() - self.startTime)
 
     def updater(self):
-        if self.status:
-            if time.time() - self.start_time < self.input_time:
-                self.set_time.set(
+        if self.isRunning:
+            if time.time() - self.startTime < self.remainingTime:
+                self.displayTime.set(
                     time.strftime(
                         "%H:%M:%S",
-                        time.gmtime(self.input_time - (time.time() - self.start_time)),
+                        time.gmtime(
+                            self.remainingTime - (time.time() - self.startTime)
+                        ),
                     )
                 )
-                self.top.after(1000, self.updater)
+                self.window.after(1000, self.updater)
             else:
                 self.finish()
 
     def finish(self):
-        self.status = False
-        self.input_time = 0
-        self.set_time.set("00:00:00")
+        self.isRunning = False
+        self.remainingTime = 0
+        self.displayTime.set("00:00:00")
         audio = path.normpath(
             path.join(path.dirname(__file__), "../assets/audio/timer/finish.wav")
         )
         sa.WaveObject.from_wave_file(audio).play()
 
-    def on_closing(self):
+    def onClosing(self):
         sa.stop_all()
-        self.father.count -= 1
-        self.top.destroy()
+        self.parent.count -= 1
+        self.window.destroy()
 
-    def show_error(self, text: str):
-        mes.showerror("错误", text, parent=self.top)
+    def showError(self, text: str):
+        mes.showerror("错误", text, parent=self.window)
