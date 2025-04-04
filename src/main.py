@@ -2,13 +2,14 @@ from choose import ChooseStudent
 import tkinter as tk
 from timer import Timer
 
-VERSION = "Alpha-0.4"
+VERSION = "Alpha-0.5"
 
 
 class Main:
     def __init__(self):
         # 初始化窗口
         self.mainWindow = tk.Tk()
+        self.window = self.mainWindow
         self.mainWindow.title(f"课堂小助手 {VERSION}")
         self.width = self.mainWindow.winfo_screenwidth()
         self.height = self.mainWindow.winfo_screenheight()

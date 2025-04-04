@@ -14,7 +14,7 @@ class ChooseStudent:
         parent.count += 1
         # 初始化窗口
         self.parent = parent
-        self.window = tk.Toplevel(parent.top)
+        self.window = tk.Toplevel(parent.window)
         self.window.title("随机选人")
         self.window.wm_attributes("-topmost", True)
         self.width = parent.width
@@ -37,12 +37,12 @@ class ChooseStudent:
     def loadNameList(self):
         # 读取名单
         try:
-            filePath = path.normpath(
+            file_path = path.normpath(
                 path.join(path.dirname(__file__), "../resource/namelist.txt")
             )
-            with open(filePath, "r", encoding="utf-8") as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 self.nameList = f.read().split("\n")
-            if self.nameList[0] == "":
+            if not self.nameList or self.nameList[0] == "":
                 raise FileNotFoundError
         except FileNotFoundError:
             mes.showerror("错误", "数据获取失败", parent=self.window)

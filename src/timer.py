@@ -11,7 +11,7 @@ class Timer:
         parent.count += 1
         # 初始化窗口
         self.parent = parent
-        self.window = tk.Toplevel(parent.top)
+        self.window = tk.Toplevel(parent.window)
         self.window.title("计时器")
         self.width = parent.width
         self.height = parent.height
@@ -80,13 +80,12 @@ class Timer:
 
     def updater(self):
         if self.isRunning:
-            if time.time() - self.startTime < self.remainingTime:
+            elapsed_time = time.time() - self.startTime
+            if elapsed_time < self.remainingTime:
                 self.displayTime.set(
                     time.strftime(
                         "%H:%M:%S",
-                        time.gmtime(
-                            self.remainingTime - (time.time() - self.startTime)
-                        ),
+                        time.gmtime(self.remainingTime - elapsed_time),
                     )
                 )
                 self.window.after(1000, self.updater)
@@ -97,10 +96,10 @@ class Timer:
         self.isRunning = False
         self.remainingTime = 0
         self.displayTime.set("00:00:00")
-        audio = path.normpath(
+        audio_path = path.normpath(
             path.join(path.dirname(__file__), "../assets/audio/timer/finish.wav")
         )
-        sa.WaveObject.from_wave_file(audio).play()
+        sa.WaveObject.from_wave_file(audio_path).play()
 
     def onClosing(self):
         sa.stop_all()
