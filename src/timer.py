@@ -91,8 +91,9 @@ class Timer:
         self.status = False
         self.input_time = 0
         self.set_time.set("00:00:00")
-        rel_path = ["assets", "audio", "timer", "finish.wav"]
-        audio = path.join(path.dirname(path.abspath(__file__)), *rel_path)
+        audio = path.normpath(
+            path.join(path.dirname(__file__), "../assets/audio/timer/finish.wav")
+        )
         sa.WaveObject.from_wave_file(audio).play()
 
     def on_closing(self):

@@ -35,7 +35,9 @@ class ChooseStudent:
     def fileIn(self):
         # 读取名单
         try:
-            filepath = path.join(path.dirname(path.abspath(__file__)), "namelist.txt")
+            filepath = path.normpath(
+                path.join(path.dirname(__file__), "../resource/namelist.txt")
+            )
             with open(filepath, "r", encoding="utf-8") as f:
                 self.namelist = f.read().split("\n")
             if self.namelist[0] == "":
@@ -63,8 +65,9 @@ class ChooseStudent:
         # 显示结果
         label = tk.Label(dialog, text=name, font=font)
         label.pack(expand=True, anchor="center")
-        rel_path = ["assets", "audio", "choose", "qiang.wav"]
-        audio = path.join(path.dirname(path.abspath(__file__)), *rel_path)
+        audio = path.normpath(
+            path.join(path.dirname(__file__), "../assets/audio/choose/qiang.wav")
+        )
         sa.WaveObject.from_wave_file(audio).play()
 
     def choose(self):
