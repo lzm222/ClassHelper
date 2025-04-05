@@ -21,4 +21,10 @@ ClassHelper 是一个用于辅助课堂教学的 Python 工具。
 我们欢迎任何形式的贡献！如果你有任何改进的想法或发现了问题，欢迎提交issue或PR。
 
 ## 许可证
-本项目使用 MIT 许可证。详情请参阅 LICENSE 文件。
+本项目使用 MIT 许可证。详情请参阅 [LICENSE](LICENSE) 文件。
+
+## 特别鸣谢
+本项目感谢以下项目提供的帮助：
+- [Python](https://www.python.org/)
+- [Simpleaudio](https://github.com/hamiltron/py-simple-audio)
+- [Pyinstaller](https://www.pyinstaller.org/) (用于在Windows平台打包为exe)

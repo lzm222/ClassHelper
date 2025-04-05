@@ -1,6 +1,6 @@
-from choose import ChooseStudent
+from src.choose import ChooseStudent
 import tkinter as tk
-from timer import Timer
+from src.timer import Timer
 
 VERSION = "Alpha-0.5"
 
