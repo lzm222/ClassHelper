@@ -30,7 +30,7 @@ jobs:
       run: pyinstaller -F -w -n "classhelper" --add-data "assets;assets" main.py
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: classhelper.exe
         path: dist/classhelper.exe
@@ -48,7 +48,7 @@ jobs:
 
     - name: Create Release
       id: create_release
-      uses: actions/create-release@v4
+      uses: actions/create-release@v3
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
