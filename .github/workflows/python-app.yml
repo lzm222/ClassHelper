@@ -41,14 +41,14 @@ jobs:
 
     steps:
     - name: Download artifact
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: classhelper.exe
         path: dist/
 
     - name: Create Release
       id: create_release
-      uses: actions/create-release@v3
+      uses: actions/create-release@v4
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
