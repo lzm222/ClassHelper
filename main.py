@@ -2,7 +2,7 @@ from src.choose import ChooseStudent
 import tkinter as tk
 from src.timer import Timer
 
-VERSION = "Alpha-0.5"
+VERSION = "Alpha-0.5.1"
 
 
 class Main:
