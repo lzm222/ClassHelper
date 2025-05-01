@@ -2,7 +2,7 @@ import sys
 from os import path
 
 
-def getResource(name: str) -> str:
+def getResourcePath(name: str) -> str:
     if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
         workSpace = path.dirname(sys.executable)
     else:

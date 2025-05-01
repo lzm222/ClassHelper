@@ -5,7 +5,7 @@ from tkinter import messagebox as mes
 from time import time
 import os.path as path
 import simpleaudio as sa
-from src.getResource import getResource
+from src.getResource import getResourcePath
 
 
 class ChooseStudent:
@@ -38,7 +38,7 @@ class ChooseStudent:
     def loadNameList(self):
         # 读取名单
         try:
-            file_path = getResource("namelist.txt")
+            file_path = getResourcePath("namelist.txt")
             with open(file_path, "r", encoding="utf-8") as f:
                 self.nameList = f.read().split("\n")
             if not self.nameList or self.nameList[0] == "":

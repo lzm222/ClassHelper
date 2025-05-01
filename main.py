@@ -1,8 +1,9 @@
 from src.choose import ChooseStudent
 import tkinter as tk
 from src.timer import Timer
+import os
 
-VERSION = "Alpha-0.5.1"
+VERSION = "Beta-0.6"
 
 
 class Main:
@@ -46,7 +47,11 @@ class Main:
 
         tryClose()
 
+def run():
+    if os.name  == "nt":
+        import src.wallpaperTimetable
+    tk.mainloop()
 
 if __name__ == "__main__":
     Main()
-    tk.mainloop()
+    run()
