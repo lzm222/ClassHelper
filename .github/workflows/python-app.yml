@@ -28,7 +28,7 @@ jobs:
         pip install --no-cache-dir -U pyinstaller simpleaudio plotly pyinstaller-hooks-contrib
 
     - name: Build executable
-      run: pyinstaller -F -w -n "classhelper" --add-data "assets;assets" main.py
+      run: pyinstaller -F -w -n "classhelper" --add-data "assets;assets" --exclude-module=__PyInstaller_hooks_0_narwhals main.py
 
     - name: Upload artifact
       uses: actions/upload-artifact@main
