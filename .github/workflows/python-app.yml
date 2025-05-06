@@ -28,7 +28,7 @@ jobs:
         pip install --no-cache-dir -U -r requirements.txt
 
     - name: Build executable
-      run: pyinstaller -F -w -n "classhelper" --add-data "assets;assets" --exclude-module=narwhals --exclude-module=__PyInstaller_hooks_0_narwhals main.py
+      run: pyinstaller -F -w -n "classhelper" --add-data "assets;assets" main.py
 
     - name: Upload artifact
       uses: actions/upload-artifact@main
