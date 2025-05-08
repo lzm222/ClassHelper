@@ -3,7 +3,10 @@ import tkinter as tk
 from src.timer import Timer
 import os
 
-VERSION = "Beta-0.6"
+if os.name  == "nt":
+    import src.wallpaperTimetable as Ttable
+
+VERSION = "Beta-0.6.1"
 
 
 class Main:
@@ -32,6 +35,11 @@ class Main:
             self.mainWindow, command=lambda: Timer(self), text="计时器"
         )
         self.timerButton.pack()
+        if os.name == "nt":
+            self.timerButton = tk.Button(
+                self.mainWindow, command=Ttable.run, text="桌面课表"
+            )
+            self.timerButton.pack()
 
         # 拦截主窗口的关闭事件
         self.mainWindow.protocol("WM_DELETE_WINDOW", self.onClosing)
@@ -47,11 +55,6 @@ class Main:
 
         tryClose()
 
-def run():
-    if os.name  == "nt":
-        import src.wallpaperTimetable
-    tk.mainloop()
-
 if __name__ == "__main__":
     Main()
-    run()
+    tk.mainloop()
