@@ -3,4 +3,4 @@ simpleaudio
 plotly
 pyinstaller-hooks-contrib
 Pillow
-kaleido
+kaleido==0.2.1
