@@ -2,18 +2,19 @@ from src.choose import ChooseStudent
 import tkinter as tk
 from src.timer import Timer
 import os
+import asyncio
+from async_tkinter_loop import async_handler, async_mainloop
 
 if os.name  == "nt":
     import src.wallpaperTimetable as Ttable
 
-VERSION = "Beta-0.6.1"
+VERSION = "Beta-0.7"
 
 
 class Main:
-    def __init__(self):
-        # 初始化窗口
-        self.mainWindow = tk.Tk()
-        self.window = self.mainWindow
+    def __init__(self, root):
+        self.mainWindow = root
+        self.window = root
         self.mainWindow.title(f"课堂小助手 {VERSION}")
         self.width = self.mainWindow.winfo_screenwidth()
         self.height = self.mainWindow.winfo_screenheight()
@@ -37,7 +38,9 @@ class Main:
         self.timerButton.pack()
         if os.name == "nt":
             self.timerButton = tk.Button(
-                self.mainWindow, command=Ttable.run, text="桌面课表"
+                self.mainWindow, 
+                command=async_handler(Ttable.run), 
+                text="桌面课表"
             )
             self.timerButton.pack()
 
@@ -56,5 +59,6 @@ class Main:
         tryClose()
 
 if __name__ == "__main__":
-    Main()
-    tk.mainloop()
+    root = tk.Tk()
+    app = Main(root)
+    async_mainloop(root)

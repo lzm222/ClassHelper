@@ -3,14 +3,12 @@ import csv
 import plotly.graph_objects as go
 from PIL import Image
 import ctypes
-import sys
 from os import path
 from tkinter import messagebox as mes
-import tkinter as tk
 
 from src.getResource import getResourcePath
 
-def run() -> None:
+async def run() -> None:
     #读取csv
     csv_path = getResourcePath("timetable.csv")
     data = []
