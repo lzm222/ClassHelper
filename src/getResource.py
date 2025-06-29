@@ -1,10 +1,10 @@
-import sys
+from platformdirs import user_data_dir
 from os import path
+from shutil import copytree
 
 
 def getResourcePath(name: str) -> str:
-    if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
-        workSpace = path.dirname(sys.executable)
-    else:
-        workSpace = path.dirname(path.dirname(__file__))
-    return path.normpath(path.join(workSpace, "resource", name))
+    dir = user_data_dir("classhelper")
+    if not path.exists(dir):
+        copytree(path.join(path.dirname(__file__), "..", "assets", "default_resource"), dir)
+    return path.join(dir, name)
