@@ -52,3 +52,4 @@ ClassHelper 是一个用于辅助课堂教学的 Python 工具。
 - [Pyinstaller](https://www.pyinstaller.org/) (用于在Windows平台打包为exe)
 - [plotly](https://plotly.com/python/)
 - [async_tkinter_loop](https://github.com/insolor/async-tkinter-loop)
+- [platformdirs](https://github.com/tox-dev/platformdirs)

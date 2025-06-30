@@ -34,6 +34,8 @@ jobs:
 
     - name: Install dependencies
       run: |
+        sudo apt update
+        sudo apt install libasound2-dev
         python -m pip install --upgrade pip
         python -m pip cache purge
         pip install --no-cache-dir -U -r requirements.txt
