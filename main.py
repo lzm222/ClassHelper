@@ -4,11 +4,12 @@ from src.timer import Timer
 import os
 import asyncio
 from async_tkinter_loop import async_handler, async_mainloop
+import src.config as config
 
 if os.name  == "nt":
     import src.wallpaperTimetable as Ttable
 
-VERSION = "Beta-0.7"
+VERSION = config.VERSION
 
 
 class Main:
