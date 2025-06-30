@@ -12,20 +12,16 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Get version
+    - name: Get python version
       run: |
-        echo "import src.config" > tmp.py
-        echo "print(src.config.VERSION, end='')" >> tmp.py
-        VERSION=$(python tmp.py)
-        PYTHON_VERSION=$(cat .python-version)
-        echo "VERSION=$VERSION" >> $GITHUB_ENV
-        echo "PYTHON_VERSION=$PYTHON_VERSION" >> $GITHUB_ENV
+        $PYTHON_VERSION=$(cat .python-version)
+        Add-Content -Path $env:GITHUB_ENV -Value "PYTHON_VERSION=$PYTHON_VERSION"
 
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -34,19 +30,17 @@ jobs:
 
     - name: Install dependencies
       run: |
-        sudo apt update
-        sudo apt install libasound2-dev
         python -m pip install --upgrade pip
         python -m pip cache purge
         pip install --no-cache-dir -U -r requirements.txt
 
     - name: Build executable
-      run: pyinstaller -F -w -n "classhelper.exe" --add-data "assets:assets" main.py
+      run: pyinstaller -F -w -n "classhelper.exe" --add-data "assets;assets" main.py
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: classhelper_${{env.VERSION}}_${{github.run_number}}.exe
+        name: classhelper.exe
         path: dist/classhelper.exe
 
   release:
@@ -54,10 +48,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Get version
+      run: |
+        echo "import src.config" > tmp.py
+        echo "print(src.config.VERSION, end='')" >> tmp.py
+        VERSION=$(python tmp.py)
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+
     - name: Download artifact
       uses: actions/download-artifact@v4
       with:
-        name: classhelper_${{env.VERSION}}_${{github.run_number}}.exe
+        name: classhelper.exe
+        path: classhelper_${{env.VERSION}}_${{github.run_number}}.exe
 
     - name: Create Release
       id: create_release
