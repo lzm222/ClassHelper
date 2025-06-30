@@ -50,6 +50,9 @@ jobs:
     steps:
     - name: Get version
       run: |
+        ls
+        echo -------------------------------------------
+        ls ..
         echo "import src.config" > tmp.py
         echo "print(src.config.VERSION, end='')" >> tmp.py
         VERSION=$(python tmp.py)
