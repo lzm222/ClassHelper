@@ -53,9 +53,6 @@ jobs:
 
     - name: Get version
       run: |
-        ls
-        echo -------------------------------------------
-        ls ..
         echo "import src.config" > tmp.py
         echo "print(src.config.VERSION, end='')" >> tmp.py
         VERSION=$(python tmp.py)
@@ -72,6 +69,6 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         files: classhelper_${{env.VERSION}}_${{github.run_number}}.exe
-        name: ${{env.VERSION}}_${{github.run_number}}
+        tag_name: ${{env.VERSION}}_${{github.run_number}}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
